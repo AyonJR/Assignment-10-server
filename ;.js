@@ -32,11 +32,10 @@ async function run() {
 
     const spotCollection = client.db('spotDB').collection('spot')
 
-    app.get('/addSpot' , async (req,res)=> { 
+    app.get('/appSpot' , async (req,res)=> { 
 
       const cursor = spotCollection.find() ;
-      const result = await cursor.toArray() ; 
-      res.send(result)
+      const result = await cursor.toArray()
 
     })
    
