@@ -1,6 +1,6 @@
 const express = require ("express") 
 const cors = require ("cors") 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId  } = require('mongodb');
 require('dotenv').config()
 const app = express() ; 
 const port = process.env.PORT || 5000 ;
@@ -30,7 +30,14 @@ async function run() {
     await client.connect(); 
 
 
-    const spotCollection = client.db('spotDB').collection('spot')
+    const spotCollection = client.db('spotDB').collection('spot') 
+    const userCollection = client.db('spotDB').collection('user')
+
+ // viewDetails
+
+
+
+
 
     app.get('/addSpot' , async (req,res)=> { 
 
@@ -47,6 +54,23 @@ async function run() {
       res.send(result)
     })
 
+  // user related apis 
+  app.get("/userSpots", async (req, res) => {
+    // Get user ID from request body
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: "User ID not provided" });
+    }
+
+    try {
+      // Fetch spots belonging to the user
+      const spots = await spotCollection.find({ userId }).toArray();
+      res.json(spots);
+    } catch (error) {
+      console.error("Error fetching user spots:", error);
+      res.status(500).json({ error: "Failed to fetch user spots" });
+    }
+  });
 
 
 
