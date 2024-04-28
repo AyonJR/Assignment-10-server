@@ -31,11 +31,11 @@ async function run() {
 
 
     const spotCollection = client.db('spotDB').collection('spot') 
-    const userCollection = client.db('spotDB').collection('user')
+    // const userCollection = client.db('spotDB').collection('user')
 
  // viewDetails
 
-
+   
 
 
 
@@ -45,7 +45,16 @@ async function run() {
       const result = await cursor.toArray() ; 
       res.send(result)
 
-    })
+    }) 
+
+
+    app.get('/addSpot/:email', async(req , res)=> {
+      const email = req.params.email ;
+      const filter = {user_email:email}
+      const result = await spotCollection.find(filter).toArray() ;
+      res.send(result) 
+
+    } )
    
     app.post('/addSpot' , async (req , res)=> {
       const newSpot = req.body ;
