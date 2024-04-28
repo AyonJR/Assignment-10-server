@@ -100,6 +100,24 @@ async function run() {
        res.send(result)
     } )
  
+  // update 
+  app.put('/addSpot/:id' , async(req , res)=> {
+    const updatedSpot = req.body 
+    const id = req.params.id 
+    const filter = {_id : new ObjectId(id)}
+    const option = { upsert: true } 
+    const spot = { 
+      $set : { 
+        image:updatedSpot.image , tourists_spot_name:updatedSpot.image , country_name:updatedSpot.country_name , location:updatedSpot.location , short_description:updatedSpot.short_description , average_cost:updatedSpot.average_cost , seasonality:updatedSpot.seasonality , travel_time:updatedSpot.travel_time , total_visitors_per_year:updatedSpot.total_visitors_per_year , user_email:updatedSpot.user_email , user_name:updatedSpot.user_name
+       }
+     } 
+
+     const result = await spotCollection.updateOne(filter,spot,option)
+     res.send(result)
+    
+  })
+
+
 
   // user related apis 
   app.get("/userSpots", async (req, res) => {
