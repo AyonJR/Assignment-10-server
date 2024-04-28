@@ -31,12 +31,22 @@ async function run() {
 
 
     const spotCollection = client.db('spotDB').collection('spot') 
-    // const userCollection = client.db('spotDB').collection('user')
+    const countriesCollection = client.db('spotDB').collection('countries')
 
  // viewDetails
 
    
+  // countries api 
+  app.get('/countries' , async (req,res)=> { 
 
+    const cursor = countriesCollection.find() ;
+    const result = await cursor.toArray() ; 
+    res.send(result)
+
+  }) 
+   
+
+  // addspot api 
 
 
     app.get('/addSpot' , async (req,res)=> { 
@@ -63,13 +73,33 @@ async function run() {
       res.send(result)
      })
 
+     //myList
+     app.post('/addSpot', async (req, res) => {
+      const newSpot = req.body;
+      newSpot.user_email = req.body.user_email; // Assign user email to spot
+      console.log(newSpot);
+      const result = await spotCollection.insertOne(newSpot);
+      res.send(result);
+  });
+  
+
    
     app.post('/addSpot' , async (req , res)=> {
       const newSpot = req.body ;
       console.log(newSpot)
       const result = await spotCollection.insertOne(newSpot)
       res.send(result)
-    })
+    }) 
+
+    //delete 
+
+    app.delete('/addSpot/:id', async(req , res) => {
+       const id = req.params.id 
+       const query = { _id : new ObjectId(id)}
+       const result = await spotCollection.deleteOne(query) 
+       res.send(result)
+    } )
+ 
 
   // user related apis 
   app.get("/userSpots", async (req, res) => {
