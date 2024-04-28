@@ -48,13 +48,21 @@ async function run() {
     }) 
 
 
-    app.get('/addSpot/:email', async(req , res)=> {
-      const email = req.params.email ;
+    app.get('/addSpot/email', async(req , res)=> {
+      const email = req.query.email ;
       const filter = {user_email:email}
       const result = await spotCollection.find(filter).toArray() ;
       res.send(result) 
 
-    } )
+    } ) 
+
+    app.get('/addSpot/:id' , async(req , res)=> {
+      const id = req.params.id ; 
+      const filter = {_id : new ObjectId(id)}
+      const result = await spotCollection.findOne(filter) 
+      res.send(result)
+     })
+
    
     app.post('/addSpot' , async (req , res)=> {
       const newSpot = req.body ;
