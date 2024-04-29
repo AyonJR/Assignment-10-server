@@ -71,7 +71,19 @@ async function run() {
       const filter = {_id : new ObjectId(id)}
       const result = await spotCollection.findOne(filter) 
       res.send(result)
-     })
+     }) 
+
+
+
+
+     //country details
+     app.get('/countries/:country', async (req, res) => {
+      const country = req.params.country;
+      const filter = { country_name: country };
+      const result = await spotCollection.find(filter).toArray();
+      res.send(result);
+  });
+  
 
      //myList
      app.post('/addSpot', async (req, res) => {
